@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import java.util.UUID;
 
 public class UserDetailsImpl implements UserDetails {
@@ -17,6 +17,7 @@ public class UserDetailsImpl implements UserDetails {
     private String username;
     private String firstName;
     private String lastName;
+
     @JsonIgnore
     private String passwordHash;
 
@@ -42,8 +43,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+        return Collections.emptyList();    }
 
     @Override
     public @Nullable String getPassword() {
@@ -56,14 +56,36 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public String getFirstName(){
-        return lastName;
+        return firstName;
     }
 
     public String getLastName(){
-        return firstName;
+        return lastName;
     }
 
     public UUID getId(){
         return id;
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
+
+
