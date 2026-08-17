@@ -1,4 +1,4 @@
-package security.jwt;
+package com.sac.expensetracking.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import security.services.UserDetailsImpl;
+import com.sac.expensetracking.security.services.UserDetailsImpl;
 
 import java.security.Key;
 import java.util.Date;

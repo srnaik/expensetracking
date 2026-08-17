@@ -1,7 +1,7 @@
-package security.services;
+package com.sac.expensetracking.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import models.User;
+import com.sac.expensetracking.models.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private UUID id;
 
-    private String username;
+    private String email;
     private String firstName;
     private String lastName;
 
@@ -24,10 +24,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(UUID id, String username, String password, String firstName,
+    public UserDetailsImpl(UUID id, String email, String password, String firstName,
         String lastName) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.passwordHash = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,7 +35,7 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(User user) {
         return new UserDetailsImpl(user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getPasswordHash(),
                 user.getFirstName(),
                 user.getLastName());
@@ -52,7 +52,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public String getFirstName(){

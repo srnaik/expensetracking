@@ -1,4 +1,4 @@
-package payload.request;
+package com.sac.expensetracking.payload.request;
 
 public class LoginRequestPayload {
 

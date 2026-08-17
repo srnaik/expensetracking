@@ -1,4 +1,4 @@
-package security.jwt;
+package com.sac.expensetracking.security.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

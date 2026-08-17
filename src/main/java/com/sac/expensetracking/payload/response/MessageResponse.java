@@ -1,4 +1,4 @@
-package payload.response;
+package com.sac.expensetracking.payload.response;
 
 public class MessageResponse {
 

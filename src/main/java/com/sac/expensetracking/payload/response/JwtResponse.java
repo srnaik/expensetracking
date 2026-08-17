@@ -1,4 +1,4 @@
-package payload.response;
+package com.sac.expensetracking.payload.response;
 
 import java.util.UUID;
 

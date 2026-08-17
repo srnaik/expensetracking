@@ -1,4 +1,4 @@
-package controllers;
+package com.sac.expensetracking.controllers;
 
 
 import jakarta.validation.Valid;
@@ -9,10 +9,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import payload.request.LoginRequestPayload;
-import payload.response.JwtResponse;
-import security.jwt.JwtUtils;
-import security.services.UserDetailsImpl;
+import com.sac.expensetracking.payload.request.LoginRequestPayload;
+import com.sac.expensetracking.payload.response.JwtResponse;
+import com.sac.expensetracking.security.jwt.JwtUtils;
+import com.sac.expensetracking.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

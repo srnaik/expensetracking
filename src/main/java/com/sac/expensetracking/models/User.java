@@ -1,4 +1,4 @@
-package models;
+package com.sac.expensetracking.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
+@Table(name = "users")
 public class User {
 
     @Id
@@ -17,8 +17,8 @@ public class User {
 
     @NotBlank
     @Size(max = 20)
-    @Column(name = "username", nullable=false,unique = true)
-    private String username;
+    @Column(name = "email", nullable=false,unique = true)
+    private String email;
 
     @Column(name = "password_hash", nullable=false)
     private String passwordHash;
@@ -34,8 +34,8 @@ public class User {
     }
 
     // Parameterized constructor
-    public User(String username, String passwordHash, String firstName, String lastName) {
-        this.username = username;
+    public User(String email, String passwordHash, String firstName, String lastName) {
+        this.email = email;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,12 +50,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPasswordHash() {
