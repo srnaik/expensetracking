@@ -3,6 +3,7 @@ package com.sac.expensetracking.controllers;
 import com.sac.expensetracking.models.Category;
 import com.sac.expensetracking.models.User;
 import com.sac.expensetracking.payload.request.CategoryRequest;
+import com.sac.expensetracking.payload.response.CategoryResponse;
 import com.sac.expensetracking.repository.CategoryRepository;
 import com.sac.expensetracking.repository.UserRepository;
 import com.sac.expensetracking.security.services.UserDetailsImpl;
@@ -35,8 +36,20 @@ public class CategoryController {
 
         category.setName(request.getCategoryName());
         category.setType(request.getType());
+        category.setIcon(request.getIcon());
+        category.setColor(request.getColor());
         category.setUser(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryRepository.save(category));
+        Category savedCategory = categoryRepository.save(category);
+
+
+        CategoryResponse response = new CategoryResponse(
+                savedCategory.getName(),
+                savedCategory.getType(),
+                savedCategory.getIcon(),
+                savedCategory.getColor()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

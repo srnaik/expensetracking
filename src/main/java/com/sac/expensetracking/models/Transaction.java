@@ -2,6 +2,7 @@ package com.sac.expensetracking.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -15,14 +16,15 @@ public class Transaction {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable=false, columnDefinition = "UUID")
-    private UUID userId;
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 
-    @Column(name = "category_id", nullable=false, columnDefinition = "UUID")
-    private UUID category_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @Column(name = "amount", nullable=false)
-    private long amount;
+    @Column(name = "amount", nullable = false, precision = 15, scale = 2)
+    private BigDecimal amount;
 
     @Column(name = "currency", nullable=false)
     private String currency;
@@ -39,15 +41,15 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(UUID id, OffsetDateTime createdAt, OffsetDateTime transactionDate, String description, long amount, String currency, UUID category_id, UUID userId) {
+    public Transaction(UUID id, OffsetDateTime createdAt, OffsetDateTime transactionDate, String description, BigDecimal amount, String currency, Category category, User user) {
         this.id = id;
         this.createdAt = createdAt;
         this.transactionDate = transactionDate;
         this.description = description;
         this.amount = amount;
         this.currency = currency;
-        this.category_id = category_id;
-        this.userId = userId;
+        this.category = category;
+        this.user = user;
     }
 
     public UUID getId() {
@@ -58,27 +60,27 @@ public class Transaction {
         this.id = id;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public UUID getCategory_id() {
-        return category_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategory_id(UUID category_id) {
-        this.category_id = category_id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

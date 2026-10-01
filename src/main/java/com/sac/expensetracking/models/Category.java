@@ -1,6 +1,7 @@
 package com.sac.expensetracking.models;
 
 
+import com.sac.expensetracking.util.CategoryType;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -21,13 +22,14 @@ public class Category {
     @Column(name = "name", nullable=false, columnDefinition = "CHARACTER VARYING")
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable=false, columnDefinition = "CHARACTER VARYING")
-    private String type;
+    private CategoryType type;
 
-    @Column(name = "icon", nullable=false, columnDefinition = "CHARACTER VARYING")
+    @Column(name = "icon", columnDefinition = "CHARACTER VARYING")
     private String icon;
 
-    @Column(name = "color", nullable=false, columnDefinition = "CHARACTER VARYING")
+    @Column(name = "color", columnDefinition = "CHARACTER VARYING")
     private String color;
 
 
@@ -35,7 +37,7 @@ public class Category {
 
     }
 
-    public Category(UUID id, User user, String name, String type, String icon, String color) {
+    public Category(UUID id, User user, String name, CategoryType type, String icon, String color) {
         this.id = id;
         this.user = user;
         this.name = name;
@@ -68,11 +70,11 @@ public class Category {
         this.name = name;
     }
 
-    public String getType() {
+    public CategoryType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(CategoryType type) {
         this.type = type;
     }
 

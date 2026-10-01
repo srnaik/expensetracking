@@ -1,11 +1,9 @@
-package com.sac.expensetracking.payload.request;
+package com.sac.expensetracking.payload.response;
 
 import com.sac.expensetracking.util.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 
-public class CategoryRequest {
-
-    @NotBlank
+public class CategoryResponse {
     private String categoryName;
 
     @NotBlank
@@ -14,6 +12,14 @@ public class CategoryRequest {
     private String icon;
 
     private String color;
+
+    public CategoryResponse(String name, CategoryType type, String icon, String color) {
+
+        this.categoryName = name;
+        this.icon = icon;
+        this.color = color;
+        this.type = type;
+    }
 
     public String getCategoryName() {
         return categoryName;
