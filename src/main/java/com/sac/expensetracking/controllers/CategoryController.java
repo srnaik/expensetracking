@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/categories")
@@ -51,5 +54,45 @@ public class CategoryController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryRequest categoryRequest,
+                                            @AuthenticationPrincipal UserDetailsImpl currentUser) {
+
+
+        Optional<Category> existingCategory =  categoryRepository.findCategoryById(id);
+
+        if(existingCategory.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Category category = existingCategory.get();
+
+        // Make sure this category belongs to logged-in user
+        if (!category.getUser().getId()
+                .equals(currentUser.getId())) {
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("You are not authorized to update this category");
+        }
+
+
+        category.setName(categoryRequest.getCategoryName());
+        category.setColor(categoryRequest.getColor());
+        category.setIcon(categoryRequest.getIcon());
+        category.setType(categoryRequest.getType());
+
+        Category updatedExpense = categoryRepository.save(category);
+
+        CategoryResponse categoryResponse = new CategoryResponse(
+                updatedExpense.getName(),
+                updatedExpense.getType(),
+                updatedExpense.getIcon(),
+                updatedExpense.getColor()
+        );
+
+        return ResponseEntity.ok(categoryResponse);
+
     }
 }
