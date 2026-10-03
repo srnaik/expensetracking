@@ -98,7 +98,7 @@ public class CategoryController {
 
 
     @GetMapping
-    public ResponseEntity<?> getExpenses(@AuthenticationPrincipal UserDetailsImpl currentUser){
+    public ResponseEntity<?> getCategories(@AuthenticationPrincipal UserDetailsImpl currentUser){
 
         List<Category> categories = categoryRepository.findUserById(currentUser.getId());
         return ResponseEntity.ok(categories);
