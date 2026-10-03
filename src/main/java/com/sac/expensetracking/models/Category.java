@@ -16,7 +16,7 @@ public class Category {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable=false, columnDefinition = "UUID")
+    @JoinColumn(name = "user_id", nullable=true, columnDefinition = "UUID")
     private User user;
 
     @Column(name = "name", nullable=false, columnDefinition = "CHARACTER VARYING")

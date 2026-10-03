@@ -62,7 +62,7 @@ public class CategoryController {
                                             @AuthenticationPrincipal UserDetailsImpl currentUser) {
 
 
-        Optional<Category> existingCategory =  categoryRepository.findCategoryById(id);
+        Optional<Category> existingCategory =  categoryRepository.findById(id);
 
         if(existingCategory.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -100,7 +100,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> getCategories(@AuthenticationPrincipal UserDetailsImpl currentUser){
 
-        List<Category> categories = categoryRepository.findUserById(currentUser.getId());
+        List<Category> categories = categoryRepository.findAvailableCategories(currentUser.getId());
         return ResponseEntity.ok(categories);
     }
 }
