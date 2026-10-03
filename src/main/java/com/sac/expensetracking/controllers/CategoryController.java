@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -93,6 +94,13 @@ public class CategoryController {
         );
 
         return ResponseEntity.ok(categoryResponse);
+    }
 
+
+    @GetMapping
+    public ResponseEntity<?> getExpenses(@AuthenticationPrincipal UserDetailsImpl currentUser){
+
+        List<Category> categories = categoryRepository.findUserById(currentUser.getId());
+        return ResponseEntity.ok(categories);
     }
 }
