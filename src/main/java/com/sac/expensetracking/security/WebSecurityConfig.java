@@ -61,6 +61,8 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/error").permitAll()
+                                .requestMatchers("/swagger-ui/**",
+                                "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.formLogin(AbstractHttpConfigurer::disable).httpBasic(AbstractHttpConfigurer::disable);

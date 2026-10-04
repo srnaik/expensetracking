@@ -100,7 +100,17 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> getCategories(@AuthenticationPrincipal UserDetailsImpl currentUser){
 
-        List<Category> categories = categoryRepository.findAvailableCategories(currentUser.getId());
-        return ResponseEntity.ok(categories);
+        List<CategoryResponse> response =
+                categoryRepository
+                        .findAvailableCategories(currentUser.getId())
+                        .stream()
+                        .map(category -> new CategoryResponse(
+                                category.getName(),
+                                category.getType(),
+                                category.getIcon(),
+                                category.getColor()
+                        ))
+                        .toList();
+        return ResponseEntity.ok(response);
     }
 }
