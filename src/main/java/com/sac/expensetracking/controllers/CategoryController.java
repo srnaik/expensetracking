@@ -115,4 +115,23 @@ public class CategoryController {
                         .toList();
         return ResponseEntity.ok(response);
     }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCategoryById(@PathVariable UUID id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Category not found with id: " + id
+                ));
+
+        CategoryResponse response = new CategoryResponse(
+                category.getName(),
+                category.getType(),
+                category.getIcon(),
+                category.getColor()
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }
