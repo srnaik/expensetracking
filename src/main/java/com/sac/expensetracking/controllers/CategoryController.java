@@ -134,4 +134,17 @@ public class CategoryController {
 
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable UUID id) {
+
+        if (!categoryRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Category not found with id: " + id);
+        }
+
+        categoryRepository.deleteById(id);
+
+        return ResponseEntity.ok("Category deleted successfully");
+    }
 }
