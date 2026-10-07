@@ -3,6 +3,7 @@ package com.sac.expensetracking.controllers;
 import com.sac.expensetracking.models.Category;
 import com.sac.expensetracking.models.User;
 import com.sac.expensetracking.payload.request.CategoryRequest;
+import com.sac.expensetracking.payload.request.CategoryUpdateRequest;
 import com.sac.expensetracking.payload.response.CategoryResponse;
 import com.sac.expensetracking.repository.CategoryRepository;
 import com.sac.expensetracking.repository.UserRepository;
@@ -59,8 +60,8 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryRequest categoryRequest,
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryUpdateRequest categoryRequest,
                                             @AuthenticationPrincipal UserDetailsImpl currentUser) {
 
 
@@ -80,11 +81,21 @@ public class CategoryController {
                     .body("You are not authorized to update this category");
         }
 
+        if (categoryRequest.getCategoryName() != null) {
+            category.setName(categoryRequest.getCategoryName());
+        }
 
-        category.setName(categoryRequest.getCategoryName());
-        category.setColor(categoryRequest.getColor());
-        category.setIcon(categoryRequest.getIcon());
-        category.setType(categoryRequest.getType());
+        if (categoryRequest.getColor() != null) {
+            category.setColor(categoryRequest.getColor());
+        }
+
+        if (categoryRequest.getIcon() != null) {
+            category.setIcon(categoryRequest.getIcon());
+        }
+
+        if (categoryRequest.getType() != null) {
+            category.setType(categoryRequest.getType());
+        }
 
         Category updatedExpense = categoryRepository.save(category);
 

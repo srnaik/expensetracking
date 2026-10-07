@@ -1,20 +1,13 @@
 package com.sac.expensetracking.payload.request;
 
 import com.sac.expensetracking.util.CategoryType;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public class CategoryRequest {
+public class CategoryUpdateRequest {
 
-    @NotBlank
     private String categoryName;
-
-    @NotNull
     private CategoryType type;
-
-    private String icon;
-
     private String color;
+    private String icon;
 
     public String getCategoryName() {
         return categoryName;
@@ -32,19 +25,19 @@ public class CategoryRequest {
         this.type = type;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
     public String getColor() {
         return color;
     }
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }
