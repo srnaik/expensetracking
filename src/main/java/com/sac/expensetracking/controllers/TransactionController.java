@@ -19,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -61,7 +60,6 @@ public class TransactionController {
                 savedTransaction.getAmount(), savedTransaction.getCategory().getName(), savedTransaction.getCurrency(),
                 savedTransaction.getDescription(), savedTransaction.getTransactionDate()
         );
-
 
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
