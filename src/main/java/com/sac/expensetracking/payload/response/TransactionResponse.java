@@ -2,21 +2,32 @@ package com.sac.expensetracking.payload.response;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 public class TransactionResponse {
 
+    private UUID id;
     private BigDecimal amount;
     private String categoryName;
     private String currency;
     private String description;
     private OffsetDateTime transactionDate;
 
-    public TransactionResponse(BigDecimal amount, String categoryName, String currency, String description, OffsetDateTime transactionDate) {
-        this.amount = amount;
-        this.categoryName = categoryName;
-        this.currency = currency;
-        this.description = description;
+    public TransactionResponse(OffsetDateTime transactionDate, String description, String currency, String categoryName, BigDecimal amount, UUID id) {
         this.transactionDate = transactionDate;
+        this.description = description;
+        this.currency = currency;
+        this.categoryName = categoryName;
+        this.amount = amount;
+        this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public BigDecimal getAmount() {

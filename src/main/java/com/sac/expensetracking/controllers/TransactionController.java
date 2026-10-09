@@ -5,6 +5,7 @@ import com.sac.expensetracking.models.Category;
 import com.sac.expensetracking.models.Transaction;
 import com.sac.expensetracking.models.User;
 import com.sac.expensetracking.payload.request.TransactionRequest;
+import com.sac.expensetracking.payload.response.CategoryResponse;
 import com.sac.expensetracking.payload.response.TransactionResponse;
 import com.sac.expensetracking.repository.CategoryRepository;
 import com.sac.expensetracking.repository.TransactionRepository;
@@ -19,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -57,11 +59,30 @@ public class TransactionController {
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         TransactionResponse transactionResponse = new TransactionResponse(
-                savedTransaction.getAmount(), savedTransaction.getCategory().getName(), savedTransaction.getCurrency(),
-                savedTransaction.getDescription(), savedTransaction.getTransactionDate()
+                savedTransaction.getTransactionDate(),savedTransaction.getDescription(),savedTransaction.getCurrency(),
+                savedTransaction.getCategory().getName(),savedTransaction.getAmount(),
+                savedTransaction.getId()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getTransactions(@AuthenticationPrincipal UserDetailsImpl currentUser){
+        List<TransactionResponse> response =
+                transactionRepository
+                        .findAllTransactions(currentUser.getId())
+                        .stream()
+                        .map(transaction -> new TransactionResponse(
+                                transaction.getTransactionDate(),
+                                transaction.getDescription(),
+                                transaction.getCurrency(),
+                                transaction.getCategory().getName(),
+                                transaction.getAmount(),
+                                transaction.getId()
+                        ))
+                        .toList();
+        return ResponseEntity.ok(response);
     }
 
 }
