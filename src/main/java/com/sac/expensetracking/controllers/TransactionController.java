@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -82,6 +83,26 @@ public class TransactionController {
                                 transaction.getId()
                         ))
                         .toList();
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTransactionById(@PathVariable UUID id) {
+
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Transaction not found with id: " + id
+                ));
+
+        TransactionResponse response = new TransactionResponse(
+                transaction.getTransactionDate(),
+                transaction.getDescription(),
+                transaction.getCurrency(),
+                transaction.getCategory().getName(),
+                transaction.getAmount(),
+                transaction.getId()
+        );
         return ResponseEntity.ok(response);
     }
 
