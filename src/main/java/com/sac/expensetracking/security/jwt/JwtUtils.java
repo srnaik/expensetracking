@@ -45,7 +45,9 @@ public class JwtUtils {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;
-        } catch (MalformedJwtException e) {
+        } catch (io.jsonwebtoken.security.SignatureException e) {
+            logger.error("JWT signature mismatch. Check signing and validation keys.");}
+        catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
