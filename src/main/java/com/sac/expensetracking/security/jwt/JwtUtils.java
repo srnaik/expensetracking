@@ -2,6 +2,7 @@ package com.sac.expensetracking.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,21 +42,47 @@ public class JwtUtils {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
+    @PostConstruct
+    public void logJwtConfiguration() {
+        try {
+            byte[] decoded = Decoders.BASE64.decode(jwtSecret);
+
+            logger.info(
+                    "JWT configuration: secretPresent={}, decodedKeyBytes={}, expirationMs={}",
+                    jwtSecret != null && !jwtSecret.isBlank(),
+                    decoded.length,
+                    jwtExpirationMs
+            );
+
+            // Validate HS256 key strength without logging the key.
+            Keys.hmacShaKeyFor(decoded);
+            logger.info("JWT signing key has acceptable strength");
+        } catch (Exception e) {
+            logger.error("JWT configuration or key validation failed: {}",
+                    e.getClass().getSimpleName());
+        }
+    }
+
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            Jwts.parserBuilder()
+                    .setSigningKey(key())
+                    .build()
+                    .parseClaimsJws(authToken);
+            logger.info("JWT validation succeeded");
             return true;
         } catch (io.jsonwebtoken.security.SignatureException e) {
-            logger.error("JWT signature mismatch. Check signing and validation keys.");}
-        catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            logger.error("JWT signature validation failed", e);
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            logger.error("JWT has expired", e);
+        } catch (MalformedJwtException e) {
+            logger.error("JWT is malformed", e);
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            logger.error("JWT is unsupported", e);
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            logger.error("Invalid JWT argument", e);
         }
+
         return false;
     }
 

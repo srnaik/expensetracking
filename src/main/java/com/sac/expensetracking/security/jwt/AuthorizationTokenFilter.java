@@ -52,6 +52,7 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
@@ -61,12 +62,7 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
         // 1. Try standard header casing
         String headerAuth = request.getHeader("Authorization");
 
-        // 2. Fallback to lowercase in case Azure's proxy normalizes headers
-        if (!StringUtils.hasText(headerAuth)) {
-            headerAuth = request.getHeader("authorization");
-        }
-
-        // 3. Safely extract and trim trailing proxy artifacts
+        // 2. Safely extract and trim trailing proxy artifacts
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             // Using substring(7).trim() discards the strict length check
             // and drops any invisible trailing carriage returns (\r\n) or spaces
@@ -75,15 +71,4 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
 
         return null;
     }
-
-
-   /* private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7, headerAuth.length());
-        }
-
-        return null;
-    }*/
 }
