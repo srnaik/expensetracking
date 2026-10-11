@@ -31,6 +31,15 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
+
+            logger.info(
+                    "JWT filter: method={}, uri={}, authHeaderPresent={}, jwtPresent={}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    request.getHeader("Authorization") != null,
+                    jwt != null
+            );
+
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
@@ -49,6 +58,26 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
+        // 1. Try standard header casing
+        String headerAuth = request.getHeader("Authorization");
+
+        // 2. Fallback to lowercase in case Azure's proxy normalizes headers
+        if (!StringUtils.hasText(headerAuth)) {
+            headerAuth = request.getHeader("authorization");
+        }
+
+        // 3. Safely extract and trim trailing proxy artifacts
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            // Using substring(7).trim() discards the strict length check
+            // and drops any invisible trailing carriage returns (\r\n) or spaces
+            return headerAuth.substring(7).trim();
+        }
+
+        return null;
+    }
+
+
+   /* private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
@@ -56,5 +85,5 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
         }
 
         return null;
-    }
+    }*/
 }
