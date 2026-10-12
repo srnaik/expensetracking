@@ -5,7 +5,6 @@ import com.sac.expensetracking.models.Category;
 import com.sac.expensetracking.models.Transaction;
 import com.sac.expensetracking.models.User;
 import com.sac.expensetracking.payload.request.TransactionRequest;
-import com.sac.expensetracking.payload.response.CategoryResponse;
 import com.sac.expensetracking.payload.response.TransactionResponse;
 import com.sac.expensetracking.repository.CategoryRepository;
 import com.sac.expensetracking.repository.TransactionRepository;

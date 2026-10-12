@@ -1,5 +1,6 @@
 package com.sac.expensetracking.security.jwt;
 
+import com.sac.expensetracking.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.sac.expensetracking.security.services.UserDetailsServiceImpl;
 
 import java.io.IOException;
 
@@ -28,6 +28,7 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
 
 
     @Override
+    @SuppressWarnings("NullableProblems")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
@@ -51,7 +52,7 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Cannot set user authentication for user", e);
             SecurityContextHolder.clearContext();
         }
 

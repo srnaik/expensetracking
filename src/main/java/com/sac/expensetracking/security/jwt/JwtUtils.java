@@ -29,6 +29,10 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication){
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
+        if (userPrincipal == null || userPrincipal.getUsername() == null) {
+            throw new IllegalArgumentException("User principal and username must not be null");
+        }
+
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
