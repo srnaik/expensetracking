@@ -106,4 +106,17 @@ public class TransactionController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable UUID id) {
+
+        if (!transactionRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Transaction not found with id: " + id);
+        }
+
+        transactionRepository.deleteById(id);
+
+        return ResponseEntity.ok("Transaction deleted successfully");
+    }
+
 }
