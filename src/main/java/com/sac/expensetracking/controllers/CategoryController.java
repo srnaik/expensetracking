@@ -54,7 +54,8 @@ public class CategoryController {
                 savedCategory.getName(),
                 savedCategory.getType(),
                 savedCategory.getIcon(),
-                savedCategory.getColor()
+                savedCategory.getColor(),
+                savedCategory.getId()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -97,13 +98,14 @@ public class CategoryController {
             category.setType(categoryRequest.getType());
         }
 
-        Category updatedExpense = categoryRepository.save(category);
+        Category updatedCategory = categoryRepository.save(category);
 
         CategoryResponse categoryResponse = new CategoryResponse(
-                updatedExpense.getName(),
-                updatedExpense.getType(),
-                updatedExpense.getIcon(),
-                updatedExpense.getColor()
+                updatedCategory.getName(),
+                updatedCategory.getType(),
+                updatedCategory.getIcon(),
+                updatedCategory.getColor(),
+                updatedCategory.getId()
         );
 
         return ResponseEntity.ok(categoryResponse);
@@ -121,7 +123,8 @@ public class CategoryController {
                                 category.getName(),
                                 category.getType(),
                                 category.getIcon(),
-                                category.getColor()
+                                category.getColor(),
+                                category.getId()
                         ))
                         .toList();
         return ResponseEntity.ok(response);
@@ -140,7 +143,8 @@ public class CategoryController {
                 category.getName(),
                 category.getType(),
                 category.getIcon(),
-                category.getColor()
+                category.getColor(),
+                category.getId()
         );
 
         return ResponseEntity.ok(response);

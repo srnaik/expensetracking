@@ -3,6 +3,8 @@ package com.sac.expensetracking.payload.response;
 import com.sac.expensetracking.util.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public class CategoryResponse {
     private String categoryName;
 
@@ -13,12 +15,15 @@ public class CategoryResponse {
 
     private String color;
 
-    public CategoryResponse(String name, CategoryType type, String icon, String color) {
+    private UUID id;
+
+    public CategoryResponse(String name, CategoryType type, String icon, String color, UUID id) {
 
         this.categoryName = name;
         this.icon = icon;
         this.color = color;
         this.type = type;
+        this.id = id;
     }
 
     public String getCategoryName() {
@@ -51,5 +56,13 @@ public class CategoryResponse {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

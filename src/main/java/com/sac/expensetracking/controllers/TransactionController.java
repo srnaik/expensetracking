@@ -5,6 +5,7 @@ import com.sac.expensetracking.models.Category;
 import com.sac.expensetracking.models.Transaction;
 import com.sac.expensetracking.models.User;
 import com.sac.expensetracking.payload.request.TransactionRequest;
+import com.sac.expensetracking.payload.request.TransactionUpdateRequest;
 import com.sac.expensetracking.payload.response.TransactionResponse;
 import com.sac.expensetracking.repository.CategoryRepository;
 import com.sac.expensetracking.repository.TransactionRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -38,7 +40,7 @@ public class TransactionController {
     private CategoryRepository categoryRepository;
 
     @PostMapping
-    public ResponseEntity<?> createTransaction(@Valid @RequestBody TransactionRequest transactionRequest, @AuthenticationPrincipal UserDetailsImpl currentUser){
+    public ResponseEntity<?> createTransaction(@Valid @RequestBody TransactionRequest transactionRequest, @AuthenticationPrincipal UserDetailsImpl currentUser) {
 
         User user = userRepository.findById(currentUser.getId()).orElseThrow(
                 () -> new RuntimeException("User Not Found"));
@@ -59,16 +61,73 @@ public class TransactionController {
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         TransactionResponse transactionResponse = new TransactionResponse(
-                savedTransaction.getTransactionDate(),savedTransaction.getDescription(),savedTransaction.getCurrency(),
-                savedTransaction.getCategory().getName(),savedTransaction.getAmount(),
+                savedTransaction.getTransactionDate(), savedTransaction.getDescription(), savedTransaction.getCurrency(),
+                savedTransaction.getCategory().getName(), savedTransaction.getAmount(),
                 savedTransaction.getId()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateTransaction(@PathVariable UUID id, @Valid @RequestBody TransactionUpdateRequest transactionUpdateRequest,
+                                               @AuthenticationPrincipal UserDetailsImpl currentUser) {
+
+
+        Optional<Transaction> existingTransaction = transactionRepository.findById(id);
+
+        if (existingTransaction.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Transaction transaction = existingTransaction.get();
+
+        // Make sure this category belongs to logged-in user
+        if (!transaction.getUser().getId()
+                .equals(currentUser.getId())) {
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("You are not authorized to update this category");
+        }
+
+        if (transactionUpdateRequest.getAmount() != null) {
+            transaction.setAmount(transactionUpdateRequest.getAmount());
+        }
+
+        if (transactionUpdateRequest.getCategoryId() != null) {
+            Category category = categoryRepository.findById(transactionUpdateRequest.getCategoryId()).orElseThrow(
+                    () -> new RuntimeException("Category Not Found"));
+            transaction.setCategory(category);
+        }
+
+        if (transactionUpdateRequest.getCurrency() != null) {
+            transaction.setCurrency(transactionUpdateRequest.getCurrency());
+        }
+
+        if (transactionUpdateRequest.getDescription() != null) {
+            transaction.setDescription(transactionUpdateRequest.getDescription());
+        }
+
+        if (transactionUpdateRequest.getTransactionDate() != null) {
+            transaction.setTransactionDate(transactionUpdateRequest.getTransactionDate());
+        }
+
+        Transaction updatedTransaction = transactionRepository.save(transaction);
+
+        TransactionResponse transactionResponse = new TransactionResponse(
+                updatedTransaction.getTransactionDate(),
+                updatedTransaction.getDescription(),
+                updatedTransaction.getCurrency(),
+                updatedTransaction.getCategory().getName(),
+                updatedTransaction.getAmount(),
+                updatedTransaction.getId()
+        );
+
+        return ResponseEntity.ok(transactionResponse);
+    }
+
     @GetMapping
-    public ResponseEntity<?> getTransactions(@AuthenticationPrincipal UserDetailsImpl currentUser){
+    public ResponseEntity<?> getTransactions(@AuthenticationPrincipal UserDetailsImpl currentUser) {
         List<TransactionResponse> response =
                 transactionRepository
                         .findAllTransactions(currentUser.getId())
