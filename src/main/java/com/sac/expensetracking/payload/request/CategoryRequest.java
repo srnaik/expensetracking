@@ -3,7 +3,11 @@ package com.sac.expensetracking.payload.request;
 import com.sac.expensetracking.util.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class CategoryRequest {
 
     @NotBlank
@@ -15,36 +19,4 @@ public class CategoryRequest {
     private String icon;
 
     private String color;
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public CategoryType getType() {
-        return type;
-    }
-
-    public void setType(CategoryType type) {
-        this.type = type;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 }
