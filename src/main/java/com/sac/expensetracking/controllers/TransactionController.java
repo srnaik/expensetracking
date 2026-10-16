@@ -87,7 +87,7 @@ public class TransactionController {
                 .equals(currentUser.getId())) {
 
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("You are not authorized to update this category");
+                    .body("You are not authorized to update this Transaction");
         }
 
         if (transactionUpdateRequest.getAmount() != null) {
