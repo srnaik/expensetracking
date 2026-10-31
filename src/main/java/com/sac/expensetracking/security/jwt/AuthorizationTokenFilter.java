@@ -1,6 +1,7 @@
 package com.sac.expensetracking.security.jwt;
 
 import com.sac.expensetracking.security.services.UserDetailsServiceImpl;
+import com.sac.expensetracking.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,8 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationTokenFilter.class);
 
@@ -41,7 +44,7 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
                     jwt != null
             );
 
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            if (jwt != null && jwtUtils.validateJwtToken(jwt) && !tokenBlacklistService.isBlackListed(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
