@@ -86,6 +86,8 @@ public class AuthenticationController {
 
         String authHeader = request.getHeader("Authorization");
 
+        logger.info("Signning out user: {}", currentUser.getUsername());
+
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Invalid authorization header!"));
