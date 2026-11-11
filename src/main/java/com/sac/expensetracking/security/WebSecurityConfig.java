@@ -88,6 +88,7 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
                 "https://expensetracking-ui-hwgrg7gebwcqecc9.westus3-01.azurewebsites.net"
         ));
 
