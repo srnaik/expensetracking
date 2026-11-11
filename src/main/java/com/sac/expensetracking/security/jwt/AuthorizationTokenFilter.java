@@ -29,6 +29,10 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationTokenFilter.class);
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
 
     @Override
     @SuppressWarnings("NullableProblems")
@@ -75,4 +79,5 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
 
         return null;
     }
+
 }
